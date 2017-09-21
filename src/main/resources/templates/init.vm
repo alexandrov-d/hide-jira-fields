@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <meta name="decorator" content="atl.admin">
+    <title>SMS NetCracker - Plugin: </title>
+    $webResourceManager.requireResourcesForContext("hide-fields-for-groups")
+    ##$webResourceManager.requireResource("com.atlassian.auiplugin:aui-select2")
+    ##$webResourceManager.requireResource("com.atlassian.auiplugin:aui-select")
+  </head>
+  <body>
+    <div id="hide-fields-for-groups">
+        <h2>Hide Fields For Groups</h2>
+        #parse("/templates/form.vm")
+
+
+        #if($ruleList.size() > 0)
+            #parse("/templates/table.vm")
+        #end
+    </div>
+  </body>
+</html>

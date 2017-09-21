@@ -1,0 +1,48 @@
+form.aui fieldset {
+    display: block;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding: 0.35em 0.75em 0.625em;
+
+    border: 2px groove;
+}
+
+form.aui legend {
+    float: none;
+    margin-left: 0;
+    position: static;
+    text-align: inherit;
+    width: auto;
+    word-wrap: normal;
+
+    display: block;
+    padding: 0 2px;
+    border: none;
+}
+
+.select-max-width {
+    max-width: 280px;
+    width: 280px !important;
+}
+
+.full-width {
+    width: 100%;
+    max-width: 250px;
+}
+#hide-fields-for-groups .select2-selection--multiple,
+.select2-container--open .select2-dropdown--below{
+    width: 220px!important;
+}
+#hide-fields-for-groups .select2-container--default{
+    width: 220px!important;
+}
+#hide-fields-for-groups .hide-field-group input{
+    height: 28px;
+    border-radius: 4px;
+    border: 1px solid #aaa;
+    width: 220px!important;
+}
+#hide-fields-for-groups .select2-choises,
+#hide-fields-for-groups .select2-container{
+    min-width: 220px;
+}

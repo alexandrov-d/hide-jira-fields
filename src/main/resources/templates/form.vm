@@ -1,0 +1,70 @@
+#* @vtlvariable name="jqlFilters" type="java.util.Collection<com.atlassian.jira.issue.search.SearchRequest>" *#
+<form class="aui" id="admin" action="" method="POST">
+
+    <div class="field-group">
+        <label for="title">Title:<span class="aui-icon icon-required"> required</span></label>
+        <input class="text " type="text" id="title" name="title" title="title" data-aui-validation-field required>
+    </div>
+
+    <div class="field-group">
+        <label for="groups">Groups:<span class="aui-icon icon-required"> required</span></label>
+        <select class="multi-select" multiple="multiple" id="groups" name="groups[]" data-aui-validation-field required>
+            #foreach ($groups in $allGroups)
+                <option value="$groups.getName()">$groups.getName()</option>
+            #end
+        </select>
+    </div>
+    <div class="field-group">
+        <input id="inverse" class="checkbox" type="checkbox" value="true" name="inverse"><label for="inverse">Inverse</label>
+        <div class="fieldDescription">
+            Check to hide for all groups except selected
+        </div>
+    </div>
+
+    <div class="field-group">
+        <label for="hide-fields">Hide Custom Fields:<span class="aui-icon icon-required"> required</span></label>
+        <select class="multi-select" multiple="multiple" id="hide-fields" name="fieldsToHide[]"
+                data-aui-validation-field required>
+            #foreach ($customField in $issueFields)
+                <option value="$customField.get("id")">$customField.get("name")</option>
+            #end
+        </select>
+    </div>
+
+    <div class="field-group">
+        <label for="jqlFilter">Use JQL Filter:</label>
+        <select class="select2-selection--single" id="jqlFilter" name="jql-filter" data-aui-validation-field>
+            <option value="">NO</option>
+            #foreach ($filter in $jqlFilters)
+                <option value="$filter.getId()">$filter.getName()</option>
+            #end
+        </select>
+    </div>
+
+    <!--fieldset class="group">
+        <legend>Rule:</legend>
+        <div class="field-group">
+              <label for="custom-fields">Custom Fields:</label>
+              <select id="custom-fields" name="custom-fields" class="full-width">
+                <option value="">none</option>
+                #foreach ($customField in $issueFields)
+                    <option value="$customField.get("id")">$customField.get("name")</option>
+                #end
+              </select>
+        </div>
+
+        <div class="field-group">
+            <label for="cf-options">Options:</label>
+            <select class="multi-select" multiple="multiple" id="cf-options" name="cf-options[]">
+                <option value="">none</option>
+            </select>
+        </div>
+    </fieldset-->
+
+    <div class="buttons-container">
+        <div class="buttons">
+            <input class="button submit" type="submit" value="Save" id="comment-save-button">
+        </div>
+    </div>
+
+</form>

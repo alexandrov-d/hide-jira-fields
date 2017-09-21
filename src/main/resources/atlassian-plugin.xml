@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}"/>
+        <param name="plugin-icon">images/pluginIcon.png</param>
+        <param name="plugin-logo">images/pluginLogo.png</param>
+    </plugin-info>
+
+    <!-- addRule our i18n resource -->
+    <resource type="i18n" name="i18n" location="hide-fields-for-groups"/>
+
+    <!-- addRule our web resources -->
+    <web-resource key="hide-fields-for-groups-resources" name="hide-fields-for-groups Web Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        <resource type="download" name="select2.min.css" location="/js/select/dist/css/select2.min.css"/>
+        <resource type="download" name="hide-fields-for-groups.css" location="/css/hide-fields-for-groups.css"/>
+        <resource type="download" name="select2.full.min.js" location="/js/select/dist/js/select2.full.min.js"/>
+        <resource type="download" name="hide-fields-for-groups.js" location="/js/hide-fields-for-groups.js"/>
+        <resource type="download" name="images/" location="/images"/>
+        <context>hide-fields-for-groups</context>
+
+    </web-resource>
+
+    <web-resource key="ui-issue" name="ui-issue Web Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        <dependency>jira.webresources:jira-global</dependency>
+        <dependency>com.atlassian.jira.jira-issue-nav-plugin:issuenav-common</dependency>
+        <resource type="download" name="hidefields.js" location="/js/hidefields.js"/>
+        <context>jira.view.issue</context>
+    </web-resource>
+
+
+
+    <servlet name="hide-fields-for-groups" class="com.adon.nc.hidefields.servlet.ConfigServlet" key="hide-fields-for-groups-servlet">
+        <url-pattern>/hide-fields-for-groups</url-pattern>
+    </servlet>
+
+    <web-section name="Hide Fields For Groups Section" i18n-name-key="hide-fields-for-groups-section.name"
+                 key="hide-fields-for-groups-section" location="admin_plugins_menu" weight="1001">
+        <description key="hide-fields-for-groups-section.description">Hide Fields For Groups Plugin</description>
+        <label key="hide-fields-for-groups-section.label"/>
+    </web-section>
+
+    <web-item name="Servlet Web Item" i18n-name-key="servlet-web-item.name" key="servlet-web-item"
+              section="admin_plugins_menu/hide-fields-for-groups-section" weight="1000">
+        <description key="servlet-web-item.description">Servlet Web Item Plugin</description>
+        <label key="Hide Fields For Groups"/>
+        <link linkId="servlet-web-item-link">/plugins/servlet/hide-fields-for-groups</link>
+    </web-item>
+
+
+    <component-import key="ao" name="Active Objects service" interface="com.atlassian.activeobjects.external.ActiveObjects"/>
+    <component-import key="userManager" interface="com.atlassian.sal.api.user.UserManager"/>
+    <component-import key="loginUriProvider" interface="com.atlassian.sal.api.auth.LoginUriProvider"/>
+    <component-import key="templateRenderer" interface="com.atlassian.templaterenderer.TemplateRenderer"/>
+
+    <component key="rule.service" name="Field Service" class="com.adon.nc.hidefields.service.HidingRuleServiceImpl"/>
+    <component key="hideFieldService" class="com.adon.nc.hidefields.service.HideFieldServiceImpl"/>
+
+
+    <ao key="ao-data" name="Active Objects configuring">
+        <desctiption>The module configuring the Active Objects service used by plugin</desctiption>
+        <entity>com.adon.nc.hidefields.entity.HidingGroup</entity>
+        <entity>com.adon.nc.hidefields.entity.HidingRule</entity>
+    </ao>
+
+    <rest name="Rest" i18n-name-key="rest.name" key="rest" path="/com.adon.nc.hidefields.hide-fields-for-groups" version="1.0">
+        <description key="rest.description">The Rest Plugin</description>
+    </rest>
+
+    <servlet-filter name="Hello World Servlet" key="modifyResponseFilter" class="com.adon.nc.hidefields.filter.ModifyResponseFilter" location="before-decoration" weight="200">
+        <description>Class for modifying view issue resopnse</description>
+        <url-pattern>/browse/*</url-pattern>
+    </servlet-filter>
+
+</atlassian-plugin>

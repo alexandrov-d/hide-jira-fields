@@ -1,0 +1,129 @@
+#* @vtlvariable name="ruleList" type="java.util.List<com.adon.nc.hidefields.entity.HidingRule>" *#
+#* @vtlvariable name="issueFields" type="java.util.List<java.util.Map>" *#
+#* @vtlvariable name="allGroups" type="java.util.Collection<com.atlassian.crowd.embedded.api.Group>" *#
+#* @vtlvariable name="jqlFilters" type="java.util.Collection<com.atlassian.jira.issue.search.SearchRequest>" *#
+
+
+<table class="aui">
+<tr>
+    <th>ID</th>
+    <th>Title<span class="aui-icon icon-required"> required</span></th>
+    <th>Inversed</th>
+    <th>Groups<span class="aui-icon icon-required"> required</span></th>
+    <th>Hide Custom Fields<span class="aui-icon icon-required"> required</span></th>
+    <th>Use JQL Filters</th>
+    <th>Action</th>
+</tr>
+#foreach ($rule in $ruleList)
+    #set ($ruleId                       = $rule.getID())
+    #set ($fieldsToHideStr  = $rule.getFields())
+    #set ($customFieldsDataStr      = $rule.getCustomFields())
+    #set ($cfOptionsDataStr         = $rule.getCFOptions())
+
+    <tr item="$ruleId">
+        <td>$ruleId</td>
+        <td>
+            <div class="hide-field-group">
+                <input class="text" type="text" name="ruleTitle$ruleId" value="$!rule.getTitle()">
+            </div>
+
+        </td>
+        <td item="inverse">
+            #set($checked = "")
+            #if( $rule.isInverse() )
+                #set($checked = "checked")
+            #end
+            <input id="inverse$ruleId" class="checkbox" type="checkbox" name="inverse$ruleId" $checked>
+        </td>
+        <td item="groups">
+            <select class="multi-select select-max-width" multiple="multiple" id="ruleGroups$ruleId" name="ruleGroups${ruleId}[]" required  itemprop="title">
+                #foreach ($group in $allGroups)
+                    #set($groupName = $group.getName())
+                    #set($selected = "")
+                    #foreach ($selectedGroup in $rule.getGroups())
+                        #if($selectedGroup.getTitle() == $groupName)
+                            #set($selected = "selected")
+                            #break
+                        #end
+                    #end
+                    <option value="$groupName" $selected>$groupName</option>
+                #end
+            </select>
+        </td>
+
+        <td item="hide-fields">
+            #set($fieldsToHide = $fieldsToHideStr.split(","))
+            <select class="multi-select" multiple="multiple" id="fieldsToHide$ruleId" class="table-cf-select select-max-width" name="fieldsToHide${ruleId}[]">
+                #foreach ($issueField in $issueFields)
+                    ##set($allCustomFieldOptions = $issueField.get("options"))
+                    #set($selected = "")
+                    #foreach ($fieldToHide in $fieldsToHide)
+                        #if($fieldToHide == $issueField.get("id"))
+                            #set($selected = "selected")
+                            #break
+                        #end
+                    #end
+                    <option value="$issueField.get("id")" $selected>$issueField.get('name')</option>
+                #end
+            </select>
+        </td>
+        <td item="hide-fields">
+            <select class="select2-selection--single" id="jql-filter$ruleId" class="table-cf-select select-max-width" name="jql-filter${ruleId}[]">
+                <option value="" $selected>No</option>
+                #foreach ($filter in $jqlFilters)
+                    #set($selected = "")
+                    #if($rule.getJQLFilter() == $filter.getId())
+                        #set($selected = "selected")
+                    #end
+                    <option value="$filter.getId()" $selected>$filter.getName()</option>
+                #end
+            </select>
+        </td>
+
+        <!--td item="custom-fields">
+            #set($customFieldsData = $customFieldsDataStr.split(","))
+
+            <select id="custom-fields${ruleId}" class="table-cf-select select-max-width" name="custom-fields${ruleId}">
+                <option value="">none</option>
+                #foreach ($allCustomField in $allCustomFields)
+                    #set($allCustomFieldId = $allCustomField.get("id"))
+                    #set($allCustomFieldName = $allCustomField.get("name"))
+                    #set($allCustomFieldOptions = $allCustomField.get("options"))
+
+                    #set($selected = false)
+                    #foreach ($customFieldData in $customFieldsData)
+                        #if($customFieldData == $allCustomFieldId)
+                            #set($selected = true)
+                            #break
+                        #end
+                    #end
+                    <option value="$allCustomFieldId" #if($selected) selected #end>$allCustomFieldName</option>
+                #end
+            </select>
+        </td>
+
+        <td item="cf-options">
+            #set($cfOptionsData = $cfOptionsDataStr.split(","))
+
+            <select class="multi-select select-max-width" multiple="multiple" id="cf-options${ruleId}" name="cf-options${ruleId}[]">
+                #*foreach ($cfOptionData in $cfOptionsData)
+                    <option value="${cfOptionData}" #if($selected) selected #end>${cfOptionData}</option>
+                #end*#
+
+                #*foreach ($allCustomFieldOption in $allCustomFieldOptions)*#
+
+
+                    <option value="">none</option>
+                #*end*#
+            </select>
+        </td-->
+
+        <td item="btn">
+            <div class="aui-buttons">
+                <a href="#" class="update aui-button" title="Update" data-ruleid="$ruleId">Update</a>
+                <a href="#" class="remove aui-button" title="Remove" data-ruleid="$ruleId"> <span class="aui-icon aui-icon-small aui-iconfont-remove">Remove</span></a>
+            </div>
+        </td>
+    </tr>
+#end
+</table>
